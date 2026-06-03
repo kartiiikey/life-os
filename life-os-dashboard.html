@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Life OS — Kartikey</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f4;
+    --bg-tertiary: #eeede8;
+    --text-primary: #1a1917;
+    --text-secondary: #6b6b68;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --green: #1D9E75;
+    --amber: #BA7517;
+    --red: #D85A30;
+    --blue: #378ADD;
+    --purple: #534AB7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary: #1c1c1a;
+      --bg-secondary: #252523;
+      --bg-tertiary: #2e2e2b;
+      --text-primary: #f0ede6;
+      --text-secondary: #9a9790;
+      --border: rgba(255,255,255,0.10);
+      --border-md: rgba(255,255,255,0.20);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-tertiary); color: var(--text-primary); min-height: 100vh; }
+  .app { max-width: 740px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 8px; }
+  .top-bar h1 { font-size: 20px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+  .badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .date-badge { font-size: 12px; color: var(--text-secondary); background: var(--bg-secondary); padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--border); }
+  .reset-badge { font-size: 11px; color: #0F6E56; background: #E1F5EE; padding: 3px 9px; border-radius: 20px; border: 0.5px solid #9FE1CB; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--bg-secondary); padding: 4px; border-radius: var(--radius-md); border: 0.5px solid var(--border); overflow-x: auto; }
+  .tab { flex: 1; min-width: 70px; padding: 7px 6px; font-size: 12px; font-weight: 500; text-align: center; cursor: pointer; border-radius: 6px; color: var(--text-secondary); border: none; background: transparent; transition: all .15s; white-space: nowrap; }
+  .tab.active { background: var(--bg-primary); color: var(--text-primary); border: 0.5px solid var(--border-md); }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .metric { background: var(--bg-secondary); border-radius: var(--radius-md); padding: .75rem; text-align: center; }
+  .metric .val { font-size: 24px; font-weight: 600; color: var(--text-primary); }
+  .metric .lbl { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .habit-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .habit-row:last-child { border-bottom: none; }
+  .habit-name { flex: 1; font-size: 14px; color: var(--text-primary); }
+  .habit-name.crossed { text-decoration: line-through; color: var(--text-secondary); }
+  .habit-streak { font-size: 12px; color: var(--text-secondary); min-width: 54px; text-align: right; }
+  .check-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-md); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; color: #fff; font-size: 14px; }
+  .check-btn.done { background: var(--green); border-color: var(--green); }
+  .del-btn { font-size: 11px; padding: 3px 7px; border: 0.5px solid var(--border); border-radius: 6px; background: transparent; cursor: pointer; color: var(--text-secondary); }
+  .del-btn:hover { background: var(--bg-secondary); }
+  .prog-bar-wrap { height: 5px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  .prog-bar { height: 100%; border-radius: 3px; transition: width .4s; }
+  .skill-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .skill-row:last-child { border-bottom: none; }
+  .skill-info { flex: 1; min-width: 0; }
+  .skill-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .skill-sub { font-size: 11px; color: var(--text-secondary); }
+  .streak-pill { background: #E1F5EE; color: #0F6E56; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 10px; }
+  .log-btn { font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 0.5px solid var(--border-md); background: transparent; cursor: pointer; color: var(--text-primary); white-space: nowrap; }
+  .log-btn.logged { color: var(--green); border-color: var(--green); }
+  .log-btn:hover { background: var(--bg-secondary); }
+  .subj-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .subj-row:last-child { border-bottom: none; }
+  .subj-info { flex: 1; min-width: 0; }
+  .subj-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .score-inputs { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .score-in { width: 50px; font-size: 13px; padding: 5px 6px; border: 0.5px solid var(--border-md); border-radius: 6px; background: var(--bg-primary); color: var(--text-primary); text-align: center; }
+  .todo-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .todo-row:last-child { border-bottom: none; }
+  .todo-text { flex: 1; font-size: 14px; color: var(--text-primary); }
+  .todo-text.done-t { text-decoration: line-through; color: var(--text-secondary); }
+  .todo-cat { font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-top: 3px; display: inline-block; font-weight: 600; }
+  .cat-bank { background: #E6F1FB; color: #0C447C; }
+  .cat-buy { background: #FAEEDA; color: #633806; }
+  .cat-task { background: #EAF3DE; color: #27500A; }
+  .cat-other { background: #EEEDFE; color: #3C3489; }
+  .add-row { display: flex; gap: 8px; margin-top: 12px; }
+  .add-in { flex: 1; font-size: 13px; padding: 8px 10px; border: 0.5px solid var(--border-md); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); outline: none; }
+  .add-in:focus { border-color: var(--blue); }
+  .add-sel { font-size: 13px; padding: 8px 8px; border: 0.5px solid var(--border-md); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); outline: none; }
+  .add-btn { padding: 8px 14px; border-radius: 8px; border: 0.5px solid var(--border-md); background: var(--bg-primary); cursor: pointer; font-size: 13px; color: var(--text-primary); white-space: nowrap; }
+  .add-btn:hover { background: var(--bg-secondary); }
+  .chart-wrap { position: relative; width: 100%; height: 180px; margin-top: 8px; }
+  .chart-wrap2 { position: relative; width: 100%; height: 200px; margin-top: 8px; }
+  .info-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 8px 12px; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border: 0.5px solid var(--border); }
+  .section-gap { margin-bottom: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: .04em; text-transform: uppercase; padding: 0 2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-bar">
+    <h1><i class="ti ti-layout-dashboard"></i> Life OS</h1>
+    <div class="badges">
+      <span class="reset-badge" id="resetInfo"></span>
+      <span class="date-badge" id="dateBadge"></span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview')"><i class="ti ti-home"></i> Overview</button>
+    <button class="tab" onclick="switchTab('habits')"><i class="ti ti-repeat"></i> Habits</button>
+    <button class="tab" onclick="switchTab('skills')"><i class="ti ti-brain"></i> Skills</button>
+    <button class="tab" onclick="switchTab('academics')"><i class="ti ti-school"></i> Academics</button>
+    <button class="tab" onclick="switchTab('todos')"><i class="ti ti-checklist"></i> Todos</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="section active">
+    <div class="metric-row">
+      <div class="metric"><div class="val" id="ov-habits">0%</div><div class="lbl">Today's Habits</div></div>
+      <div class="metric"><div class="val" id="ov-skills">0%</div><div class="lbl">Skill Avg</div></div>
+      <div class="metric"><div class="val" id="ov-acad">—</div><div class="lbl">Academic Avg</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Weekly Habit Completion</div>
+      <div class="chart-wrap"><canvas id="weekChart" role="img" aria-label="Weekly habit completion bar chart">Weekly data.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-donut"></i> Skill Progress</div>
+      <div class="chart-wrap2"><canvas id="skillChart" role="img" aria-label="Skill progress donut chart">Skill data.</canvas></div>
+    </div>
+  </div>
+
+  <!-- HABITS -->
+  <div id="habits" class="section">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0"></i> Kal subah open karne pe sab habits automatically untick ho jayenge — streaks save rahegi!</div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-repeat"></i> Today's Habits</div>
+      <div id="habitList"></div>
+      <div class="add-row">
+        <input class="add-in" id="newHabit" placeholder="Add new habit..." onkeydown="if(event.key==='Enter')addHabit()" />
+        <button class="add-btn" onclick="addHabit()"><i class="ti ti-plus"></i> Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-calendar-stats"></i> 7-Day Completion</div>
+      <div class="chart-wrap"><canvas id="streakChart" role="img" aria-label="7-day streak chart">Streak data.</canvas></div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="skills" class="section">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0"></i> "Log today" roz reset hota hai. Progress % permanently save hota hai.</div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-brain"></i> Skills Being Developed</div>
+      <div id="skillList"></div>
+      <div class="add-row">
+        <input class="add-in" id="newSkill" placeholder="New skill (e.g. React, SQL)..." onkeydown="if(event.key==='Enter')addSkill()" />
+        <button class="add-btn" onclick="addSkill()"><i class="ti ti-plus"></i> Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-donut"></i> Skills Distribution</div>
+      <div class="chart-wrap2"><canvas id="skillDist" role="img" aria-label="Skill distribution donut">Skill data.</canvas></div>
+    </div>
+  </div>
+
+  <!-- ACADEMICS -->
+  <div id="academics" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-school"></i> CUJ Subjects</div>
+      <div id="cujList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-certificate"></i> IIT Madras BS Subjects</div>
+      <div id="iitmList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Academic Progress</div>
+      <div class="chart-wrap2"><canvas id="acadChart" role="img" aria-label="Academic scores horizontal bar">Academic data.</canvas></div>
+    </div>
+  </div>
+
+  <!-- TODOS -->
+  <div id="todos" class="section">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0"></i> Todos hamesha save rahenge jab tak manually delete na karo.</div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-checklist"></i> Tasks, Errands & Purchases</div>
+      <div id="todoList"></div>
+      <div class="add-row">
+        <input class="add-in" id="newTodo" placeholder="New todo..." onkeydown="if(event.key==='Enter')addTodo()" />
+        <select class="add-sel" id="todoCat">
+          <option value="task">Task</option>
+          <option value="bank">Bank</option>
+          <option value="buy">Purchase</option>
+          <option value="other">Other</option>
+        </select>
+        <button class="add-btn" onclick="addTodo()"><i class="ti ti-plus"></i></button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-pie"></i> Todos by Category</div>
+      <div style="position:relative;width:100%;height:180px;margin-top:8px"><canvas id="todoChart" role="img" aria-label="Todos by category pie">Todo data.</canvas></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+const TODAY_KEY=todayStr();
+const TODAY=new Date();
+const DAY_KEYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+const DEFAULT={
+  lastDate:TODAY_KEY,
+  habits:[
+    {id:1,name:'Skill practice (1 hr)',streak:0,doneToday:false},
+    {id:2,name:'ShadowFox internship work',streak:0,doneToday:false},
+    {id:3,name:'IIT Madras study (45 min)',streak:0,doneToday:false},
+    {id:4,name:'DSA / coding practice',streak:0,doneToday:false},
+    {id:5,name:'Read / research',streak:0,doneToday:false},
+  ],
+  skills:[
+    {id:1,name:'Python',sub:'Data Science / ML',pct:68,streak:0,loggedDate:''},
+    {id:2,name:'Machine Learning',sub:'Scikit-learn, models',pct:45,streak:0,loggedDate:''},
+    {id:3,name:'Data Analysis',sub:'Pandas, NumPy',pct:55,streak:0,loggedDate:''},
+    {id:4,name:'C / C++',sub:'DSA & systems',pct:50,streak:0,loggedDate:''},
+    {id:5,name:'Streamlit',sub:'Web deployment',pct:35,streak:0,loggedDate:''},
+  ],
+  cuj:[
+    {id:1,name:'Data Science',got:null,total:100},
+    {id:2,name:'Cybersecurity',got:null,total:100},
+    {id:3,name:'Data Structures & Algorithms',got:null,total:100},
+    {id:4,name:'Quantum Mechanics',got:null,total:100},
+  ],
+  iitm:[
+    {id:1,name:'Mathematics for Data Science',got:null,total:100},
+    {id:2,name:'Statistics',got:null,total:100},
+    {id:3,name:'Computational Thinking',got:null,total:100},
+  ],
+  todos:[
+    {id:1,text:'Bank visit — update KYC',cat:'bank',done:false},
+    {id:2,text:'Buy pen drive 64GB',cat:'buy',done:false},
+    {id:3,text:'Submit internship task 1 — ShadowFox',cat:'task',done:false},
+    {id:4,text:'Enroll in IITM next semester',cat:'task',done:false},
+  ],
+  weekHistory:[0,0,0,0,0,0,0]
+};
+
+function loadState(){try{const r=localStorage.getItem('lifeOS_v3');if(r)return JSON.parse(r);}catch(e){}return null;}
+function saveState(){try{localStorage.setItem('lifeOS_v3',JSON.stringify(state));}catch(e){}}
+
+let state=loadState()||JSON.parse(JSON.stringify(DEFAULT));
+
+function dailyReset(){
+  if(state.lastDate!==TODAY_KEY){
+    const hd=state.habits.filter(h=>h.doneToday).length;
+    const ht=state.habits.length||1;
+    state.weekHistory=([...state.weekHistory,Math.round((hd/ht)*100)]).slice(-7);
+    state.habits.forEach(h=>{if(!h.doneToday&&h.streak>0)h.streak=0;h.doneToday=false;});
+    state.skills.forEach(s=>{if(s.loggedDate&&s.loggedDate!==TODAY_KEY&&s.streak>0)s.streak=0;});
+    state.lastDate=TODAY_KEY;
+    saveState();
+  }
+}
+dailyReset();
+
+let charts={};
+let nextId=500;
+
+document.getElementById('dateBadge').textContent=TODAY.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+function updateResetBadge(){
+  const now=new Date();
+  const midnight=new Date(now);midnight.setHours(24,0,0,0);
+  const diff=Math.round((midnight-now)/60000);
+  const h=Math.floor(diff/60);const m=diff%60;
+  document.getElementById('resetInfo').textContent='🔄 Resets in '+(h>0?h+'h ':'')+m+'m';
+}
+updateResetBadge();
+setInterval(updateResetBadge,60000);
+setInterval(()=>{if(todayStr()!==state.lastDate){dailyReset();renderHabits();renderSkills();updateOverview();}},30000);
+
+function switchTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{if(t.getAttribute('onclick').includes("'"+tab+"'"))t.classList.add('active');});
+  setTimeout(()=>renderCharts(tab),60);
+}
+
+function sc(p){return p>=70?'#1D9E75':p>=40?'#BA7517':'#D85A30';}
+
+function renderHabits(){
+  document.getElementById('habitList').innerHTML=state.habits.map(h=>`
+    <div class="habit-row">
+      <button class="check-btn ${h.doneToday?'done':''}" onclick="toggleHabit(${h.id})">
+        ${h.doneToday?'<i class="ti ti-check"></i>':''}
+      </button>
+      <span class="habit-name ${h.doneToday?'crossed':''}">${h.name}</span>
+      <span class="habit-streak">${h.streak>0?'🔥 '+h.streak+'d':'—'}</span>
+      <button class="del-btn" onclick="deleteHabit(${h.id})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+  updateOverview();saveState();
+}
+
+function toggleHabit(id){
+  const h=state.habits.find(x=>x.id===id);
+  h.doneToday=!h.doneToday;
+  h.streak=h.doneToday?h.streak+1:Math.max(0,h.streak-1);
+  renderHabits();
+  if(document.getElementById('habits').classList.contains('active'))renderCharts('habits');
+  if(document.getElementById('overview').classList.contains('active'))renderCharts('overview');
+}
+function deleteHabit(id){state.habits=state.habits.filter(x=>x.id!==id);renderHabits();}
+function addHabit(){
+  const v=document.getElementById('newHabit').value.trim();if(!v)return;
+  state.habits.push({id:nextId++,name:v,streak:0,doneToday:false});
+  document.getElementById('newHabit').value='';renderHabits();saveState();
+}
+
+function renderSkills(){
+  document.getElementById('skillList').innerHTML=state.skills.map(s=>{
+    const logged=s.loggedDate===TODAY_KEY;
+    return `<div class="skill-row">
+      <div class="skill-info">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="skill-name">${s.name}</span>
+          ${s.streak>0?`<span class="streak-pill">🔥 ${s.streak}d</span>`:''}
+        </div>
+        <div class="skill-sub">${s.sub}</div>
+        <div class="prog-bar-wrap"><div class="prog-bar" style="width:${s.pct}%;background:${sc(s.pct)}"></div></div>
+      </div>
+      <span style="font-size:13px;font-weight:600;min-width:36px;text-align:right;color:${sc(s.pct)}">${s.pct}%</span>
+      <button class="log-btn ${logged?'logged':''}" onclick="logSkill(${s.id})">${logged?'✓ Done':'+ Log'}</button>
+      <button class="del-btn" onclick="deleteSkill(${s.id})"><i class="ti ti-trash"></i></button>
+    </div>`;
+  }).join('');
+  updateOverview();saveState();
+}
+
+function logSkill(id){
+  const s=state.skills.find(x=>x.id===id);
+  if(s.loggedDate===TODAY_KEY){s.pct=Math.max(0,s.pct-2);s.streak=Math.max(0,s.streak-1);s.loggedDate='';}
+  else{s.pct=Math.min(100,s.pct+2);s.streak++;s.loggedDate=TODAY_KEY;}
+  renderSkills();
+  if(document.getElementById('skills').classList.contains('active'))renderCharts('skills');
+  if(document.getElementById('overview').classList.contains('active'))renderCharts('overview');
+}
+function deleteSkill(id){state.skills=state.skills.filter(x=>x.id!==id);renderSkills();saveState();}
+function addSkill(){
+  const v=document.getElementById('newSkill').value.trim();if(!v)return;
+  state.skills.push({id:nextId++,name:v,sub:'New skill',pct:5,streak:0,loggedDate:''});
+  document.getElementById('newSkill').value='';renderSkills();saveState();
+  if(document.getElementById('skills').classList.contains('active'))renderCharts('skills');
+}
+
+function renderAcademics(){
+  ['cuj','iitm'].forEach(src=>{
+    document.getElementById(src+'List').innerHTML=state[src].map(s=>{
+      const pct=s.got!=null?Math.round((s.got/s.total)*100):0;
+      return `<div class="subj-row">
+        <div class="subj-info">
+          <div class="subj-name">${s.name}</div>
+          <div style="font-size:11px;color:var(--text-secondary)">${src==='cuj'?'CUJ':'IIT Madras BS'}</div>
+          <div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%;background:${sc(pct)}"></div></div>
+        </div>
+        <div class="score-inputs">
+          <input class="score-in" type="number" min="0" max="${s.total}" placeholder="Score" value="${s.got??''}" oninput="updateScore('${src}',${s.id},this.value,${s.total})" />
+          <span style="font-size:12px;color:var(--text-secondary)">/ ${s.total}</span>
+          <span style="font-size:13px;font-weight:600;min-width:38px;text-align:right;color:${sc(pct)}">${s.got!=null?pct+'%':'—'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  });
+  updateOverview();saveState();
+}
+
+function updateScore(src,id,val,tot){
+  const item=state[src].find(x=>x.id===id);
+  item.got=val===''?null:Math.min(tot,Math.max(0,parseFloat(val)));
+  renderAcademics();
+  if(document.getElementById('academics').classList.contains('active'))renderCharts('academics');
+  if(document.getElementById('overview').classList.contains('active'))renderCharts('overview');
+}
+
+function renderTodos(){
+  document.getElementById('todoList').innerHTML=state.todos.map(t=>`
+    <div class="todo-row">
+      <button class="check-btn ${t.done?'done':''}" onclick="toggleTodo(${t.id})">
+        ${t.done?'<i class="ti ti-check"></i>':''}
+      </button>
+      <div style="flex:1">
+        <div class="todo-text ${t.done?'done-t':''}">${t.text}</div>
+        <span class="todo-cat cat-${t.cat}">${t.cat}</span>
+      </div>
+      <button class="del-btn" onclick="deleteTodo(${t.id})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+  if(document.getElementById('todos').classList.contains('active'))renderCharts('todos');
+  saveState();
+}
+function toggleTodo(id){const t=state.todos.find(x=>x.id===id);t.done=!t.done;renderTodos();}
+function deleteTodo(id){state.todos=state.todos.filter(x=>x.id!==id);renderTodos();}
+function addTodo(){
+  const v=document.getElementById('newTodo').value.trim();if(!v)return;
+  const cat=document.getElementById('todoCat').value;
+  state.todos.push({id:nextId++,text:v,cat,done:false});
+  document.getElementById('newTodo').value='';renderTodos();
+}
+
+function updateOverview(){
+  const hd=state.habits.filter(h=>h.doneToday).length;
+  const ht=state.habits.length||1;
+  document.getElementById('ov-habits').textContent=Math.round((hd/ht)*100)+'%';
+  const sa=state.skills.length?Math.round(state.skills.reduce((a,s)=>a+s.pct,0)/state.skills.length):0;
+  document.getElementById('ov-skills').textContent=sa+'%';
+  const all=[...state.cuj,...state.iitm].filter(s=>s.got!=null);
+  document.getElementById('ov-acad').textContent=all.length?Math.round(all.reduce((a,s)=>a+(s.got/s.total)*100,0)/all.length)+'%':'—';
+}
+
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
+
+function renderCharts(tab){
+  const days=[];for(let i=6;i>=0;i--){const d=new Date(TODAY);d.setDate(d.getDate()-i);days.push(DAY_KEYS[d.getDay()]);}
+  const hd=state.habits.filter(h=>h.doneToday).length;
+  const ht=state.habits.length||1;
+  const todayPct=Math.round((hd/ht)*100);
+  const weekData=[...state.weekHistory.slice(-6),todayPct];
+  while(weekData.length<7)weekData.unshift(0);
+
+  if(tab==='overview'){
+    destroyChart('weekChart');
+    const wc=document.getElementById('weekChart');
+    if(wc)charts.weekChart=new Chart(wc,{type:'bar',data:{labels:days,datasets:[{label:'%',data:weekData,backgroundColor:weekData.map(v=>v>=80?'#1D9E75':v>=50?'#BA7517':'#9FE1CB'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(128,128,128,.08)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+    destroyChart('skillChart');
+    const sch=document.getElementById('skillChart');
+    if(sch&&state.skills.length)charts.skillChart=new Chart(sch,{type:'doughnut',data:{labels:state.skills.map(s=>s.name),datasets:[{data:state.skills.map(s=>s.pct),backgroundColor:['#1D9E75','#378ADD','#BA7517','#D85A30','#534AB7','#D4537E','#639922'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},padding:10}}}}});
+  }
+  if(tab==='habits'){
+    destroyChart('streakChart');
+    const sc2=document.getElementById('streakChart');
+    if(sc2)charts.streakChart=new Chart(sc2,{type:'bar',data:{labels:days,datasets:[{label:'%',data:weekData,backgroundColor:'#1D9E75',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(128,128,128,.08)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+  }
+  if(tab==='skills'){
+    destroyChart('skillDist');
+    const sd=document.getElementById('skillDist');
+    if(sd&&state.skills.length)charts.skillDist=new Chart(sd,{type:'doughnut',data:{labels:state.skills.map(s=>s.name),datasets:[{data:state.skills.map(s=>s.pct),backgroundColor:['#1D9E75','#378ADD','#BA7517','#D85A30','#534AB7','#D4537E','#639922'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},padding:10}}}}});
+  }
+  if(tab==='academics'){
+    destroyChart('acadChart');
+    const ac=document.getElementById('acadChart');
+    if(ac){
+      const all=[...state.cuj,...state.iitm];
+      const barH=Math.max(200,(all.length*44)+60);
+      ac.parentElement.style.height=barH+'px';
+      charts.acadChart=new Chart(ac,{type:'bar',data:{labels:all.map(s=>s.name.length>24?s.name.slice(0,22)+'…':s.name),datasets:[{label:'%',data:all.map(s=>s.got!=null?Math.round((s.got/s.total)*100):0),backgroundColor:all.map(s=>s.got!=null?sc(Math.round((s.got/s.total)*100)):'#D3D1C7'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(128,128,128,.08)'}},y:{ticks:{font:{size:11}},grid:{display:false}}}}});
+    }
+  }
+  if(tab==='todos'){
+    destroyChart('todoChart');
+    const tc=document.getElementById('todoChart');
+    if(tc){
+      const cats=['task','bank','buy','other'];
+      const data=cats.map(c=>state.todos.filter(t=>t.cat===c).length);
+      if(data.some(v=>v>0))charts.todoChart=new Chart(tc,{type:'pie',data:{labels:['Task','Bank','Purchase','Other'],datasets:[{data,backgroundColor:['#378ADD','#1D9E75','#BA7517','#534AB7'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},padding:10}}}}});
+    }
+  }
+}
+
+renderHabits();renderSkills();renderAcademics();renderTodos();updateOverview();
+setTimeout(()=>renderCharts('overview'),200);
+</script>
+</body>
+</html>
