@@ -91,7 +91,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="sw('todos')"><i class="ti ti-checklist"></i> Todos</button>
   </div>
 
-  <!-- OVERVIEW -->
   <div id="overview" class="section active">
     <div class="metric-row">
       <div class="metric"><div class="val" id="ov-h">0%</div><div class="lbl">Habits</div></div>
@@ -99,10 +98,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="metric"><div class="val" id="ov-a">0%</div><div class="lbl">Academics</div></div>
       <div class="metric"><div class="val" id="ov-f">0%</div><div class="lbl">Fitness</div></div>
     </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-chart-bar"></i> Weekly Global Progress</div>
-      <div class="chart-h160"><canvas id="weekChart"></canvas></div>
+    
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-chart-bar"></i> Weekly Global Progress</div>
+        <div class="chart-h200"><canvas id="weekChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-radar"></i> Life Balance</div>
+        <div class="chart-h200"><canvas id="radarChart"></canvas></div>
+      </div>
     </div>
+    
     <div class="two-col">
       <div class="card">
         <div class="card-title"><i class="ti ti-chart-donut"></i> Skills Breakup</div>
@@ -115,7 +122,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- HABITS -->
   <div id="habits" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Roz midnight pe reset. Streaks and % tracking.</div>
     <div class="card">
@@ -144,7 +150,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- SKILLS -->
   <div id="skills" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Skills Chasing Timeline — Auto calculated %</div>
     <div class="card">
@@ -175,7 +180,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- ACADEMICS -->
   <div id="academics" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> College subjects & certificates schedule tracking.</div>
     <div class="card">
@@ -206,7 +210,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- CONTENT -->
   <div id="content" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Content pipeline workflow on scheduled days.</div>
     <div class="card">
@@ -237,7 +240,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- FITNESS -->
   <div id="fitness" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Daily reset gym routine with specific targeted days.</div>
     
@@ -274,7 +276,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- TODOS -->
   <div id="todos" class="section">
     <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> One-time or recurring tasks on specific days.</div>
     <div class="card">
@@ -338,8 +339,8 @@ const defState = {
   }
 };
 
-function load(){try{const r=localStorage.getItem('lifeOS_v6');if(r)return JSON.parse(r);}catch(e){}return null;}
-function save(){try{localStorage.setItem('lifeOS_v6',JSON.stringify(state));}catch(e){}}
+function load(){try{const r=localStorage.getItem('lifeOS_v8');if(r)return JSON.parse(r);}catch(e){}return null;}
+function save(){try{localStorage.setItem('lifeOS_v8',JSON.stringify(state));}catch(e){}}
 let state = load() || JSON.parse(JSON.stringify(defState));
 let nid = 1000;
 let charts = {};
@@ -396,6 +397,12 @@ setInterval(()=>{if(todayStr()!==state.lastDate){dailyReset(); renderAll();}},30
 
 function gc(p){return p>=75?'#1D9E75':p>=40?'#BA7517':'#D85A30';}
 
+// Helper to get average pct for Radar chart & Overview
+function getAvg(k) {
+  const l = state.lists[k];
+  return l.length ? Math.round(l.reduce((a,c)=>a+(c.pct||0),0)/l.length) : 0;
+}
+
 // TAB SWITCHER
 function sw(tab){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -411,7 +418,6 @@ function buildHTML(s, listKey) {
   const actDaysStr = (s.activeDays||[0,1,2,3,4,5,6]).length===7 ? 'Daily' : s.activeDays.map(d=>DAYS[d]).join(', ');
   const left = s.totalDays ? (s.totalDays - (s.completedDays||0)) : '∞';
   
-  // Calculate dynamic PCT if totalDays exist, else use saved pct
   if(s.totalDays > 0) s.pct = Math.min(100, Math.round(((s.completedDays||0) / s.totalDays)*100));
   const pct = s.pct || 0;
 
@@ -480,7 +486,6 @@ function addItem(k, nId, sId, tId) {
   save(); renderAll(); reChart([k,'overview']);
 }
 
-// SPECIFIC FITNESS GLOBAL
 function toggleGym() {
   state.gymDoneToday = !state.gymDoneToday;
   if(state.gymDoneToday) state.gymStreak++; else state.gymStreak = Math.max(0, state.gymStreak-1);
@@ -492,19 +497,15 @@ function renderFitnessBtn() {
   else { b.classList.remove('done'); b.innerHTML = ''; }
 }
 
-// RENDERERS
 function renderList(key) {
   const el = document.getElementById(key+'List');
   if(el) el.innerHTML = state.lists[key].map(s => buildHTML(s, key)).join('');
 }
 
 function updateOverviewStats() {
-  const keys = ['habits', 'skills', 'academics', 'fitness'];
-  keys.forEach(k => {
-    const list = state.lists[k];
-    const totalPct = list.length ? Math.round(list.reduce((a,c)=>a+(c.pct||0), 0) / list.length) : 0;
+  ['habits', 'skills', 'academics', 'fitness'].forEach(k => {
     const el = document.getElementById(`ov-${k.charAt(0)}`);
-    if(el) el.textContent = totalPct + '%';
+    if(el) el.textContent = getAvg(k) + '%';
   });
 }
 
@@ -514,7 +515,6 @@ function renderAll() {
   updateOverviewStats();
 }
 
-// CHARTS ENGINE
 function dc(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 function reChart(tabs){tabs.forEach(t=>{if(document.getElementById(t)?.classList.contains('active')) renderCharts(t);});}
 
@@ -526,6 +526,37 @@ function renderCharts(tab) {
     dc('weekChart'); const wc = document.getElementById('weekChart');
     if(wc) charts.weekChart = new Chart(wc,{type:'bar', data:{labels:['D-6','D-5','D-4','D-3','D-2','Yest','Today'], datasets:[{data:state.weekHistory, backgroundColor:'#378ADD', borderRadius:4}]}, options:{...dLayout, scales:dScales}});
     
+    // RADAR CHART INITIATION
+    dc('radarChart'); const rc = document.getElementById('radarChart');
+    const radarData = [getAvg('habits'), getAvg('skills'), getAvg('academics'), getAvg('fitness'), getAvg('content')];
+    if(rc) charts.radarChart = new Chart(rc, {
+      type: 'radar',
+      data: {
+        labels: ['Habits', 'Skills', 'Academics', 'Fitness', 'Content'],
+        datasets: [{
+          label: 'Balance %',
+          data: radarData,
+          backgroundColor: 'rgba(55, 138, 221, 0.2)', // Light Blue Fill
+          borderColor: '#378ADD', // Solid Blue Border
+          pointBackgroundColor: '#1D9E75', // Green Points
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(128,128,128,.1)' },
+            grid: { color: 'rgba(128,128,128,.1)' },
+            pointLabels: { font: { size: 10, weight: 600 }, color: 'var(--tx2)' },
+            ticks: { display: false, min: 0, max: 100 }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
     dc('skillChart'); const sc = document.getElementById('skillChart');
     if(sc && state.lists.skills.length) charts.skillChart = new Chart(sc,{type:'doughnut', data:{labels:state.lists.skills.map(s=>s.name), datasets:[{data:state.lists.skills.map(s=>s.pct||1), backgroundColor:['#1D9E75','#378ADD','#BA7517','#D85A30','#534AB7','#D4537E'], borderWidth:0}]}, options:{...dLayout, plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
     
@@ -533,18 +564,37 @@ function renderCharts(tab) {
     if(cc && state.lists.content.length) charts.contentChart = new Chart(cc,{type:'pie', data:{labels:state.lists.content.map(s=>s.name), datasets:[{data:state.lists.content.map(s=>s.pct||1), backgroundColor:['#534AB7','#BA7517','#378ADD','#1D9E75'], borderWidth:0}]}, options:{...dLayout, plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
   }
 
-  // Habits Graph: Shows Current Streaks vs Pct
   if(tab === 'habits') {
     dc('habitGraph'); const hg = document.getElementById('habitGraph');
     if(hg) charts.habitGraph = new Chart(hg,{type:'bar', data:{labels:state.lists.habits.map(s=>s.name.substring(0,10)), datasets:[{label:'Streak', data:state.lists.habits.map(s=>s.streak), backgroundColor:'#1D9E75', borderRadius:4}, {label:'Progress %', data:state.lists.habits.map(s=>s.pct), backgroundColor:'#BA7517', borderRadius:4}]}, options:{responsive:true, maintainAspectRatio:false, scales:{y:{grid:{color:'rgba(128,128,128,.1)'}}, x:{grid:{display:false}}}}});
   }
 
-  // Universal Progress Bars for other sections
+  const graphMap = {
+    skills: 'skillProgGraph',
+    academics: 'acadProgGraph',
+    content: 'contProgGraph',
+    fitness: 'fitProgGraph',
+    todos: 'todoProgGraph'
+  };
+
   ['skills', 'academics', 'content', 'fitness', 'todos'].forEach(t => {
     if(tab === t) {
-      const gId = t.substring(0,4) + 'ProgGraph';
+      const gId = graphMap[t];
       dc(gId); const el = document.getElementById(gId);
-      if(el) charts[gId] = new Chart(el,{type:'bar', data:{labels:state.lists[t].map(s=>s.name.substring(0,12)), datasets:[{data:state.lists[t].map(s=>s.pct), backgroundColor:state.lists[t].map(s=>gc(s.pct)), borderRadius:4}]}, options:{...dLayout, indexAxis:'y', scales:{x:{min:0,max:100,grid:{color:'rgba(128,128,128,.1)'}}, y:{grid:{display:false}}}}});
+      if(el) {
+        charts[gId] = new Chart(el, {
+          type: 'bar', 
+          data: {
+            labels: state.lists[t].map(s=>s.name.substring(0,12)), 
+            datasets: [{
+              data: state.lists[t].map(s=>s.pct || 0), 
+              backgroundColor: state.lists[t].map(s=>gc(s.pct || 0)), 
+              borderRadius: 4
+            }]
+          }, 
+          options: {...dLayout, indexAxis:'y', scales:{x:{min:0,max:100,grid:{color:'rgba(128,128,128,.1)'}}, y:{grid:{display:false}}}}
+        });
+      }
     }
   });
 }
