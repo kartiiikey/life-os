@@ -48,44 +48,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .del-btn{font-size:11px;padding:3px 6px;border:0.5px solid var(--br);border-radius:5px;background:transparent;cursor:pointer;color:var(--tx3);flex-shrink:0}
 .del-btn:hover{background:var(--bg2)}
 .name{flex:1;font-size:13px;color:var(--tx1)}
-.name.crossed{text-decoration:line-through;color:var(--tx2)}
 .streak-pill{background:#E1F5EE;color:#0F6E56;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap}
 .prog-wrap{height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;margin-top:4px}
 .prog{height:100%;border-radius:2px;transition:width .4s}
-.add-row{display:flex;gap:7px;margin-top:10px}
-.add-in{flex:1;font-size:13px;padding:7px 10px;border:0.5px solid var(--br2);border-radius:7px;background:var(--bg1);color:var(--tx1);outline:none}
-.add-in:focus{border-color:var(--blue)}
-.add-sel{font-size:12px;padding:7px 7px;border:0.5px solid var(--br2);border-radius:7px;background:var(--bg1);color:var(--tx1);outline:none}
+.add-row{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.add-in{flex:1;min-width:110px;font-size:13px;padding:7px 10px;border:0.5px solid var(--br2);border-radius:7px;background:var(--bg1);color:var(--tx1);outline:none}
 .add-btn{padding:7px 13px;border-radius:7px;border:0.5px solid var(--br2);background:var(--bg1);cursor:pointer;font-size:13px;color:var(--tx1);white-space:nowrap}
 .add-btn:hover{background:var(--bg2)}
-.score-in{width:48px;font-size:12px;padding:4px 6px;border:0.5px solid var(--br2);border-radius:5px;background:var(--bg1);color:var(--tx1);text-align:center}
+.score-in{width:60px;font-size:12px;padding:7px 6px;border:0.5px solid var(--br2);border-radius:5px;background:var(--bg1);color:var(--tx1);text-align:center}
 .chart-h160{position:relative;width:100%;height:160px;margin-top:8px}
 .chart-h200{position:relative;width:100%;height:200px;margin-top:8px}
 .info-box{background:var(--bg2);border-radius:var(--r8);padding:7px 11px;font-size:12px;color:var(--tx2);margin-bottom:10px;display:flex;align-items:center;gap:8px;border:0.5px solid var(--br)}
 .tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;display:inline-block;margin-top:2px}
-.tag-bank{background:#E6F1FB;color:#0C447C}
-.tag-buy{background:#FAEEDA;color:#633806}
-.tag-task{background:#EAF3DE;color:#27500A}
-.tag-other{background:#EEEDFE;color:#3C3489}
-.tag-cert{background:#EEEDFE;color:#3C3489}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:500px){.two-col{grid-template-columns:1fr}.metric-row{grid-template-columns:repeat(2,1fr)}}
-.roadmap-item{padding:10px 0;border-bottom:0.5px solid var(--br);display:flex;gap:12px;align-items:flex-start}
-.roadmap-item:last-child{border-bottom:none}
-.roadmap-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.roadmap-content{flex:1}
-.roadmap-title{font-size:13px;font-weight:600;color:var(--tx1)}
-.roadmap-desc{font-size:12px;color:var(--tx2);margin-top:2px;line-height:1.5}
-.week-label{font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px}
-.pct-label{font-size:13px;font-weight:600;min-width:36px;text-align:right}
-.log-btn{font-size:11px;padding:4px 9px;border-radius:6px;border:0.5px solid var(--br2);background:transparent;cursor:pointer;color:var(--tx1);white-space:nowrap}
-.log-btn.logged{color:var(--green);border-color:var(--green)}
-.log-btn:hover{background:var(--bg2)}
 
-/* New styles for timeline & day selector */
-.day-cb { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; margin-bottom: 8px; font-size: 11px; }
-.day-cb label { display: flex; align-items: center; gap: 3px; cursor: pointer; color: var(--tx2); font-weight:500; }
-.timeline-stats { background:var(--bg2); padding: 8px; border-radius: 6px; font-size: 11px; color: var(--tx2); margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+/* Timeline specific styles */
+.day-cb { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; margin-bottom: 8px; font-size: 11px; }
+.day-cb label { display: flex; align-items: center; gap: 2px; cursor: pointer; color: var(--tx2); font-weight:600; background:var(--bg2); padding:3px 6px; border-radius:4px; border:0.5px solid var(--br)}
+.day-cb input:checked + span { color: var(--blue); }
+.timeline-stats { background:var(--bg2); padding: 8px; border-radius: 6px; font-size: 11px; color: var(--tx2); margin-top: 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; }
+.pct-label {font-size:13px;font-weight:600;min-width:36px;text-align:right}
 </style>
 </head>
 <body>
@@ -106,28 +89,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="sw('content')"><i class="ti ti-video"></i> Content</button>
     <button class="tab" onclick="sw('fitness')"><i class="ti ti-barbell"></i> Fitness</button>
     <button class="tab" onclick="sw('todos')"><i class="ti ti-checklist"></i> Todos</button>
-    <button class="tab" onclick="sw('roadmap')"><i class="ti ti-map"></i> Roadmap</button>
   </div>
 
   <!-- OVERVIEW -->
   <div id="overview" class="section active">
     <div class="metric-row">
       <div class="metric"><div class="val" id="ov-h">0%</div><div class="lbl">Habits</div></div>
-      <div class="metric"><div class="val" id="ov-s">0%</div><div class="lbl">Skills Avg</div></div>
-      <div class="metric"><div class="val" id="ov-a">—</div><div class="lbl">Academics</div></div>
+      <div class="metric"><div class="val" id="ov-s">0%</div><div class="lbl">Skills</div></div>
+      <div class="metric"><div class="val" id="ov-a">0%</div><div class="lbl">Academics</div></div>
       <div class="metric"><div class="val" id="ov-f">0%</div><div class="lbl">Fitness</div></div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-chart-bar"></i> Weekly Habit Completion</div>
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Weekly Global Progress</div>
       <div class="chart-h160"><canvas id="weekChart"></canvas></div>
     </div>
     <div class="two-col">
       <div class="card">
-        <div class="card-title"><i class="ti ti-chart-donut"></i> Skills</div>
+        <div class="card-title"><i class="ti ti-chart-donut"></i> Skills Breakup</div>
         <div class="chart-h160"><canvas id="skillChart"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-title"><i class="ti ti-chart-pie"></i> Content Pipeline</div>
+        <div class="card-title"><i class="ti ti-chart-pie"></i> Content</div>
         <div class="chart-h160"><canvas id="contentChart"></canvas></div>
       </div>
     </div>
@@ -135,278 +117,286 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- HABITS -->
   <div id="habits" class="section">
-    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Roz midnight pe sab untick — streaks save rehti hain!</div>
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Roz midnight pe reset. Streaks and % tracking.</div>
     <div class="card">
       <div class="card-title"><i class="ti ti-repeat"></i> Daily Habits</div>
-      <div id="habitList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newHabit" placeholder="Add habit..." onkeydown="if(event.key==='Enter')addHabit()" />
-        <button class="add-btn" onclick="addHabit()"><i class="ti ti-plus"></i> Add</button>
+      <div id="habitsList"></div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newHabit" placeholder="New habit name..." />
+          <button class="add-btn" onclick="addItem('habits', 'newHabit')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="day-cb" id="cb_habits">
+          <label><input type="checkbox" value="1" checked> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3" checked> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5" checked> <span>F</span></label>
+          <label><input type="checkbox" value="6" checked> <span>S</span></label>
+          <label><input type="checkbox" value="0" checked> <span>S</span></label>
+        </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-calendar-stats"></i> 7-Day View</div>
-      <div class="chart-h160"><canvas id="streakChart"></canvas></div>
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Habits Streak & Progress</div>
+      <div class="chart-h160"><canvas id="habitGraph"></canvas></div>
     </div>
   </div>
 
   <!-- SKILLS -->
   <div id="skills" class="section">
-    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Roz ek baar "Log today" dabao — timeline and progress automatically update hogi.</div>
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Skills Chasing Timeline — Auto calculated %</div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-brain"></i> Skills Chasing Timeline</div>
-      <div id="skillList"></div>
+      <div class="card-title"><i class="ti ti-brain"></i> Tracked Skills</div>
+      <div id="skillsList"></div>
       
-      <div style="margin-top:16px; padding-top:12px; border-top:0.5px solid var(--br)">
-        <div style="font-size:12px; font-weight:600; margin-bottom:8px">Add New Skill Tracker</div>
-        <div class="add-row" style="margin-top:0; flex-wrap:wrap">
-          <input class="add-in" id="newSkillName" placeholder="Skill name (e.g. Python)" style="min-width:120px" />
-          <input class="add-in" id="newSkillSub" placeholder="Detail" style="min-width:100px" />
-          <input class="add-in" id="newSkillSrc" placeholder="Source (e.g. YouTube/Coursera)" style="min-width:150px" />
-          <input class="score-in" id="newSkillTot" placeholder="Total Days" type="number" style="width:75px" />
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newSkill" placeholder="Skill name..." />
+          <input class="add-in" id="subSkill" placeholder="Source/Topic" />
+          <input class="score-in" id="totSkill" placeholder="Days" type="number" />
+          <button class="add-btn" onclick="addItem('skills', 'newSkill', 'subSkill', 'totSkill')"><i class="ti ti-plus"></i></button>
         </div>
-        <div class="day-cb" id="skillDaysCb">
-          <label><input type="checkbox" value="1" checked> Mon</label>
-          <label><input type="checkbox" value="2" checked> Tue</label>
-          <label><input type="checkbox" value="3" checked> Wed</label>
-          <label><input type="checkbox" value="4" checked> Thu</label>
-          <label><input type="checkbox" value="5" checked> Fri</label>
-          <label><input type="checkbox" value="6"> Sat</label>
-          <label><input type="checkbox" value="0"> Sun</label>
+        <div class="day-cb" id="cb_skills">
+          <label><input type="checkbox" value="1" checked> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3" checked> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5" checked> <span>F</span></label>
+          <label><input type="checkbox" value="6"> <span>S</span></label>
+          <label><input type="checkbox" value="0"> <span>S</span></label>
         </div>
-        <button class="add-btn" onclick="addSkill()" style="width:100%"><i class="ti ti-plus"></i> Start Tracking Skill</button>
       </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Skill Progress %</div>
+      <div class="chart-h160"><canvas id="skillProgGraph"></canvas></div>
     </div>
   </div>
 
   <!-- ACADEMICS -->
   <div id="academics" class="section">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> College subjects & certificates schedule tracking.</div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-school"></i> CUJ — B.Tech CSE</div>
-      <div id="cujList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newcujName" placeholder="New subject..." onkeydown="if(event.key==='Enter')addAcad('cuj')" />
-        <input class="score-in" id="newcujTot" placeholder="Total" value="100" />
-        <button class="add-btn" onclick="addAcad('cuj')"><i class="ti ti-plus"></i></button>
+      <div class="card-title"><i class="ti ti-school"></i> Study Schedule (CUJ & IITM)</div>
+      <div id="academicsList"></div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newAcad" placeholder="Subject name..." />
+          <input class="add-in" id="subAcad" placeholder="College/Type" />
+          <input class="score-in" id="totAcad" placeholder="Total Sessions" type="number" />
+          <button class="add-btn" onclick="addItem('academics', 'newAcad', 'subAcad', 'totAcad')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="day-cb" id="cb_academics">
+          <label><input type="checkbox" value="1" checked> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3" checked> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5" checked> <span>F</span></label>
+          <label><input type="checkbox" value="6"> <span>S</span></label>
+          <label><input type="checkbox" value="0"> <span>S</span></label>
+        </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-certificate"></i> IIT Madras BS</div>
-      <div id="iitmList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newiitmName" placeholder="New subject..." onkeydown="if(event.key==='Enter')addAcad('iitm')" />
-        <input class="score-in" id="newiitmTot" placeholder="Total" value="100" />
-        <button class="add-btn" onclick="addAcad('iitm')"><i class="ti ti-plus"></i></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-trophy"></i> Certificates & Courses to Do</div>
-      <div id="certList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newCert" placeholder="Certificate / course name..." onkeydown="if(event.key==='Enter')addCert()" />
-        <button class="add-btn" onclick="addCert()"><i class="ti ti-plus"></i></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="ti ti-chart-bar"></i> Score Progress</div>
-      <div class="chart-h200"><canvas id="acadChart"></canvas></div>
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Academic Progress %</div>
+      <div class="chart-h160"><canvas id="acadProgGraph"></canvas></div>
     </div>
   </div>
 
   <!-- CONTENT -->
   <div id="content" class="section">
-    <div class="two-col">
-      <div class="metric"><div class="val" id="c-ai-count" style="font-size:18px">0</div><div class="lbl">AI Page Ideas</div></div>
-      <div class="metric"><div class="val" id="c-p-count" style="font-size:18px">0</div><div class="lbl">Personal Page Ideas</div></div>
-    </div>
-    <br/>
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Content pipeline workflow on scheduled days.</div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-robot"></i> Page 1 — AI Kids Educational</div>
-      <div id="aiContentList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newAiIdea" placeholder="Video idea / topic..." onkeydown="if(event.key==='Enter')addAiIdea()" />
-        <select class="add-sel" id="aiStatus">
-          <option value="idea">Idea</option>
-          <option value="scripting">Scripting</option>
-          <option value="making">Making</option>
-          <option value="done">Posted</option>
-        </select>
-        <button class="add-btn" onclick="addAiIdea()"><i class="ti ti-plus"></i></button>
+      <div class="card-title"><i class="ti ti-video"></i> Content Tracker</div>
+      <div id="contentList"></div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newCont" placeholder="Video idea/series..." />
+          <input class="add-in" id="subCont" placeholder="AI or Personal" />
+          <input class="score-in" id="totCont" placeholder="Videos" type="number" />
+          <button class="add-btn" onclick="addItem('content', 'newCont', 'subCont', 'totCont')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="day-cb" id="cb_content">
+          <label><input type="checkbox" value="1"> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3"> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5"> <span>F</span></label>
+          <label><input type="checkbox" value="6" checked> <span>S</span></label>
+          <label><input type="checkbox" value="0" checked> <span>S</span></label>
+        </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-user-circle"></i> Page 2 — Personal Edited Content</div>
-      <div id="personalContentList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newPIdea" placeholder="Video idea / topic..." onkeydown="if(event.key==='Enter')addPIdea()" />
-        <select class="add-sel" id="pStatus">
-          <option value="idea">Idea</option>
-          <option value="scripting">Scripting</option>
-          <option value="making">Making</option>
-          <option value="done">Posted</option>
-        </select>
-        <button class="add-btn" onclick="addPIdea()"><i class="ti ti-plus"></i></button>
-      </div>
+      <div class="card-title"><i class="ti ti-chart-bar"></i> Pipeline Progress %</div>
+      <div class="chart-h160"><canvas id="contProgGraph"></canvas></div>
     </div>
   </div>
 
   <!-- FITNESS -->
   <div id="fitness" class="section">
-    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Gym aur fitness daily reset hoti hai — streak track hoti rahegi.</div>
-    <div class="metric-row" style="grid-template-columns:repeat(3,1fr)">
-      <div class="metric"><div class="val" id="fit-streak">0</div><div class="lbl">Gym Streak</div></div>
-      <div class="metric"><div class="val" id="fit-week">0/7</div><div class="lbl">This Week</div></div>
-      <div class="metric"><div class="val" id="fit-total">0</div><div class="lbl">Total Sessions</div></div>
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> Daily reset gym routine with specific targeted days.</div>
+    
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-weight:600;font-size:14px"><i class="ti ti-barbell"></i> Global Gym Done Today?</span>
+      <button id="gymGlobalBtn" class="check-btn" onclick="toggleGym()" style="width:36px;height:36px;font-size:18px"></button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-activity"></i> Workouts & Goals</div>
+      <div id="fitnessList"></div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newFit" placeholder="Exercise / Goal..." />
+          <input class="add-in" id="subFit" placeholder="Sets/Reps" />
+          <input class="score-in" id="totFit" placeholder="Days" type="number" />
+          <button class="add-btn" onclick="addItem('fitness', 'newFit', 'subFit', 'totFit')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="day-cb" id="cb_fitness">
+          <label><input type="checkbox" value="1" checked> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3" checked> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5" checked> <span>F</span></label>
+          <label><input type="checkbox" value="6" checked> <span>S</span></label>
+          <label><input type="checkbox" value="0"> <span>S</span></label>
+        </div>
+      </div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-barbell"></i> Today's Workout</div>
-      <div id="fitnessList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newExercise" placeholder="Exercise (e.g. Push-ups 3x15)..." onkeydown="if(event.key==='Enter')addExercise()" />
-        <button class="add-btn" onclick="addExercise()"><i class="ti ti-plus"></i></button>
-      </div>
+      <div class="card-title"><i class="ti ti-chart-line"></i> Fitness Consistency</div>
+      <div class="chart-h160"><canvas id="fitProgGraph"></canvas></div>
     </div>
   </div>
 
   <!-- TODOS -->
   <div id="todos" class="section">
+    <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i> One-time or recurring tasks on specific days.</div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-checklist"></i> All Tasks</div>
-      <div id="todoList"></div>
-      <div class="add-row">
-        <input class="add-in" id="newTodo" placeholder="New todo..." onkeydown="if(event.key==='Enter')addTodo()" />
-        <select class="add-sel" id="todoCat">
-          <option value="task">Task</option>
-          <option value="bank">Bank</option>
-          <option value="buy">Purchase</option>
-          <option value="other">Other</option>
-        </select>
-        <button class="add-btn" onclick="addTodo()"><i class="ti ti-plus"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROADMAP -->
-  <div id="roadmap" class="section">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-map"></i> Kartikey's Master Roadmap</div>
-      <div class="week-label">Right Now (June 2026)</div>
-      <div class="roadmap-item">
-        <div class="roadmap-dot" style="background:var(--green)"></div>
-        <div class="roadmap-content">
-          <div class="roadmap-title">ShadowFox Internship — Active</div>
-          <div class="roadmap-desc">Data Science tasks daily karo. Har task complete karo properly — yeh resume ka strongest point hai abhi.</div>
+      <div class="card-title"><i class="ti ti-checklist"></i> Master Todo List</div>
+      <div id="todosList"></div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid var(--br)">
+        <div class="add-row" style="margin-top:0;">
+          <input class="add-in" id="newTodo" placeholder="Task name..." />
+          <input class="add-in" id="subTodo" placeholder="Category" />
+          <input class="score-in" id="totTodo" placeholder="Repeats" type="number" />
+          <button class="add-btn" onclick="addItem('todos', 'newTodo', 'subTodo', 'totTodo')"><i class="ti ti-plus"></i></button>
         </div>
-      </div>
-      <!-- Other static roadmap items left as is to save space, but you can keep them -->
-    </div>
-    <div class="card">
-      <div class="card-title" style="justify-content:space-between;flex-wrap:wrap">
-        <span><i class="ti ti-clock"></i> Daily Time Split</span>
-        <button onclick="openTSModal()" style="font-size:11px;padding:3px 10px;border-radius:6px;border:0.5px solid var(--blue);background:transparent;cursor:pointer;color:var(--blue);font-weight:600"><i class="ti ti-plus"></i> Add Slot</button>
-      </div>
-      <div id="tsSplitList"></div>
-    </div>
-
-    <!-- TIME SPLIT MODAL -->
-    <div id="tsModalBg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center">
-      <div style="background:var(--bg1);border-radius:var(--r12);padding:1.5rem;width:92%;max-width:420px;border:0.5px solid var(--br2)">
-        <h3 id="tsModalHeading" style="font-size:15px;font-weight:600;margin-bottom:14px">Add Time Slot</h3>
-        <label style="font-size:12px;color:var(--tx2);display:block;margin-bottom:4px">Time Label (e.g. Morning, 9 PM)</label>
-        <input id="tsInputTime" placeholder="Morning" style="width:100%;font-size:13px;padding:8px 10px;border:0.5px solid var(--br2);border-radius:7px;background:var(--bg2);color:var(--tx1);outline:none;margin-bottom:10px"/>
-        <label style="font-size:12px;color:var(--tx2);display:block;margin-bottom:4px">Activity</label>
-        <input id="tsInputAct" placeholder="e.g. Gym / exercise — 45 min" style="width:100%;font-size:13px;padding:8px 10px;border:0.5px solid var(--br2);border-radius:7px;background:var(--bg2);color:var(--tx1);outline:none"/>
-        <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
-          <button onclick="closeTSModal()" style="padding:8px 14px;border-radius:7px;border:0.5px solid var(--br2);background:transparent;cursor:pointer;font-size:13px;color:var(--tx2)">Cancel</button>
-          <button onclick="saveTS()" style="padding:8px 18px;border-radius:7px;border:none;background:var(--blue);color:#fff;cursor:pointer;font-size:13px;font-weight:600">Save</button>
+        <div class="day-cb" id="cb_todos">
+          <label><input type="checkbox" value="1" checked> <span>M</span></label>
+          <label><input type="checkbox" value="2" checked> <span>T</span></label>
+          <label><input type="checkbox" value="3" checked> <span>W</span></label>
+          <label><input type="checkbox" value="4" checked> <span>T</span></label>
+          <label><input type="checkbox" value="5" checked> <span>F</span></label>
+          <label><input type="checkbox" value="6" checked> <span>S</span></label>
+          <label><input type="checkbox" value="0" checked> <span>S</span></label>
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-pie"></i> Todo Status</div>
+      <div class="chart-h160"><canvas id="todoProgGraph"></canvas></div>
+    </div>
   </div>
+
 </div>
 
 <script>
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-const TK=todayStr(),NOW=new Date(),DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const DEF={
-  lastDate:TK,
-  habits:[
-    {id:1,name:'Gym / workout',streak:0,done:false},
-    {id:2,name:'Skill practice (1 hr)',streak:0,done:false},
-    {id:3,name:'ShadowFox internship work',streak:0,done:false},
-    {id:4,name:'IIT Madras study (45 min)',streak:0,done:false},
-  ],
-  skills:[
-    {id:1,name:'Python',sub:'Data Science',source:'YouTube',activeDays:[1,3,4],totalDays:60,completedDays:15,missedDays:2,pct:25,streak:0,logDate:''},
-    {id:2,name:'Video Editing',sub:'CapCut',source:'Self Paced',activeDays:[0,6],totalDays:30,completedDays:5,missedDays:0,pct:16,streak:0,logDate:''},
-  ],
-  cuj:[
-    {id:1,name:'Data Science',got:null,total:100},
-    {id:2,name:'Cybersecurity',got:null,total:100},
-  ],
-  iitm:[
-    {id:1,name:'Maths for DS',got:null,total:100},
-  ],
-  certs:[],
-  aiContent:[],
-  pContent:[],
-  fitness:{gymStreak:0,gymTotal:0,gymDoneToday:false,gymWeek:[0,0,0,0,0,0,0],exercises:[],goals:[]},
-  todos:[],
-  weekHistory:[0,0,0,0,0,0,0],
-  timeSplit:[
-    {id:1,time:'Morning',activity:'Gym / exercise — 45 min'},
-    {id:2,time:'Late Morning',activity:'ShadowFox / Internship work — 2 hr'},
-  ]
+const TK=todayStr(), NOW=new Date(), DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// Standardized Item Schema
+const defState = {
+  lastDate: TK,
+  weekHistory: [0,0,0,0,0,0,0],
+  gymDoneToday: false, gymStreak: 0,
+  lists: {
+    habits: [
+      {id:1, name:'Drink 3L Water', sub:'', activeDays:[0,1,2,3,4,5,6], totalDays:0, completedDays:0, missedDays:0, pct:0, streak:0, logDate:''}
+    ],
+    skills: [
+      {id:2, name:'Python', sub:'ML Basics', activeDays:[1,3,5], totalDays:60, completedDays:10, missedDays:1, pct:16, streak:0, logDate:''}
+    ],
+    academics: [
+      {id:3, name:'Data Science', sub:'CUJ', activeDays:[1,2,4,5], totalDays:40, completedDays:5, missedDays:0, pct:12, streak:0, logDate:''}
+    ],
+    content: [
+      {id:4, name:'AI Kids Shorts', sub:'Story Series', activeDays:[0,6], totalDays:20, completedDays:2, missedDays:0, pct:10, streak:0, logDate:''}
+    ],
+    fitness: [
+      {id:5, name:'Push-ups 3x15', sub:'Strength', activeDays:[1,2,3,4,5,6], totalDays:30, completedDays:15, missedDays:2, pct:50, streak:0, logDate:''}
+    ],
+    todos: [
+      {id:6, name:'Bank KYC', sub:'Finance', activeDays:[1,2,3,4,5], totalDays:1, completedDays:0, missedDays:0, pct:0, streak:0, logDate:''}
+    ]
+  }
 };
 
-function load(){try{const r=localStorage.getItem('lifeOS_v5');if(r)return JSON.parse(r);}catch(e){}return null;}
-function save(){try{localStorage.setItem('lifeOS_v5',JSON.stringify(state));}catch(e){}}
-let state=load()||JSON.parse(JSON.stringify(DEF));
-let nid=1000,charts={};
+function load(){try{const r=localStorage.getItem('lifeOS_v6');if(r)return JSON.parse(r);}catch(e){}return null;}
+function save(){try{localStorage.setItem('lifeOS_v6',JSON.stringify(state));}catch(e){}}
+let state = load() || JSON.parse(JSON.stringify(defState));
+let nid = 1000;
+let charts = {};
 
+// 24 Hour Reset & Missed Day Calculation
 function dailyReset(){
-  if(state.lastDate!==TK){
-    const hd=state.habits.filter(h=>h.done).length,ht=state.habits.length||1;
-    state.weekHistory=([...state.weekHistory,Math.round((hd/ht)*100)]).slice(-7);
-    
-    // Check missed skills
+  if(state.lastDate !== TK){
     let yDate = new Date(); yDate.setDate(yDate.getDate() - 1);
     let yStr = yDate.getFullYear()+'-'+(yDate.getMonth()+1)+'-'+yDate.getDate();
     let yDow = yDate.getDay();
-    
-    state.habits.forEach(h=>{if(!h.done&&h.streak>0)h.streak=0;h.done=false;});
-    state.skills.forEach(s=>{
-      // Missed day tracking
-      if(s.activeDays && s.activeDays.includes(yDow) && s.logDate!==yStr) {
-        s.missedDays = (s.missedDays || 0) + 1;
-        s.streak = 0; // Break streak on missed scheduled day
-      } else if (s.logDate && s.logDate!==TK && s.streak>0 && (!s.activeDays || s.activeDays.includes(yDow))) {
-         s.streak = 0; 
-      }
+
+    let allDone=0, allTot=0;
+
+    Object.keys(state.lists).forEach(key => {
+      state.lists[key].forEach(item => {
+        const isActiveDay = item.activeDays && item.activeDays.length>0 ? item.activeDays.includes(yDow) : true;
+        
+        // Track missed logic
+        if (isActiveDay && item.logDate !== yStr) {
+          item.missedDays = (item.missedDays || 0) + 1;
+          item.streak = 0; 
+        } else if (item.logDate && item.logDate !== TK && item.streak > 0 && isActiveDay) {
+           item.streak = 0; 
+        }
+
+        // Global overview tracking based on yesterday
+        if(isActiveDay) { allTot++; if(item.logDate === yStr) allDone++; }
+
+        // Clear log for new day
+        if(item.logDate !== TK) item.logDate = ''; 
+      });
     });
 
-    if(state.fitness.gymDoneToday){
-      state.fitness.gymWeek=([...state.fitness.gymWeek,1]).slice(-7);
-    } else {
-      state.fitness.gymWeek=([...state.fitness.gymWeek,0]).slice(-7);
-      if(state.fitness.gymStreak>0)state.fitness.gymStreak=0;
-    }
-    state.fitness.gymDoneToday=false;
-    state.fitness.exercises.forEach(e=>e.done=false);
-    state.lastDate=TK;save();
+    state.weekHistory = [...state.weekHistory.slice(-6), allTot>0?Math.round((allDone/allTot)*100):0];
+    
+    // Gym specific
+    if(!state.gymDoneToday) state.gymStreak = 0;
+    state.gymDoneToday = false;
+
+    state.lastDate = TK; save();
   }
 }
 dailyReset();
 
-document.getElementById('dateBadge').textContent=NOW.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+// UI Time & Badges
+document.getElementById('dateBadge').textContent = NOW.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
 function updateResetBadge(){
-  const now=new Date(),mid=new Date(now);mid.setHours(24,0,0,0);
-  const diff=Math.round((mid-now)/60000),h=Math.floor(diff/60),m=diff%60;
+  const now=new Date(), mid=new Date(now); mid.setHours(24,0,0,0);
+  const diff=Math.round((mid-now)/60000), h=Math.floor(diff/60), m=diff%60;
   document.getElementById('resetInfo').textContent='🔄 Resets in '+(h>0?h+'h ':'')+m+'m';
 }
-updateResetBadge();setInterval(updateResetBadge,60000);
-setInterval(()=>{if(todayStr()!==state.lastDate){dailyReset();renderAll();}},30000);
+updateResetBadge(); setInterval(updateResetBadge,60000);
+setInterval(()=>{if(todayStr()!==state.lastDate){dailyReset(); renderAll();}},30000);
 
+function gc(p){return p>=75?'#1D9E75':p>=40?'#BA7517':'#D85A30';}
+
+// TAB SWITCHER
 function sw(tab){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -415,258 +405,152 @@ function sw(tab){
   setTimeout(()=>renderCharts(tab),60);
 }
 
-function gc(p){return p>=70?'#1D9E75':p>=40?'#BA7517':'#D85A30';}
-
-/* HABITS */
-function renderHabits(){
-  document.getElementById('habitList').innerHTML=state.habits.map(h=>`
-    <div class="row">
-      <button class="check-btn ${h.done?'done':''}" onclick="toggleHabit(${h.id})">${h.done?'<i class="ti ti-check"></i>':''}</button>
-      <span class="name ${h.done?'crossed':''}">${h.name}</span>
-      ${h.streak>0?`<span class="streak-pill">🔥 ${h.streak}d</span>`:''}
-      <button class="del-btn" onclick="delHabit(${h.id})"><i class="ti ti-trash"></i></button>
-    </div>`).join('');
-  updateOverview();save();
-}
-function toggleHabit(id){const h=state.habits.find(x=>x.id===id);h.done=!h.done;h.streak=h.done?h.streak+1:Math.max(0,h.streak-1);renderHabits();reChart(['habits','overview']);}
-function delHabit(id){state.habits=state.habits.filter(x=>x.id!==id);renderHabits();}
-function addHabit(){const v=document.getElementById('newHabit').value.trim();if(!v)return;state.habits.push({id:nid++,name:v,streak:0,done:false});document.getElementById('newHabit').value='';renderHabits();save();}
-
-/* SKILLS (Advanced Timeline) */
-function renderSkills(){
-  document.getElementById('skillList').innerHTML=state.skills.map(s=>{
-    const logged=s.logDate===TK;
-    const actDaysStr = (s.activeDays||[]).map(d=>DAYS[d]).join(', ') || 'Any';
-    const left = s.totalDays ? (s.totalDays - s.completedDays) : '?';
-    return `<div class="row" style="align-items:flex-start;padding:12px 0;flex-direction:column;gap:6px">
-      <div style="display:flex;width:100%;align-items:center;gap:10px">
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-            <span style="font-size:13px;font-weight:600;color:var(--tx1)">${s.name}</span>
-            <span style="font-size:11px;color:var(--tx2)">${s.sub}</span>
-            ${s.streak>0?`<span class="streak-pill">🔥 ${s.streak}d</span>`:''}
-          </div>
-          <div class="prog-wrap" style="margin-top:6px"><div class="prog" style="width:${s.pct}%;background:${gc(s.pct)}"></div></div>
-        </div>
-        <span class="pct-label" style="color:${gc(s.pct)}">${s.pct}%</span>
-        <button class="log-btn ${logged?'logged':''}" onclick="logSkill(${s.id})">${logged?'✓ Logged':'+ Log Day'}</button>
-        <button class="del-btn" onclick="delSkill(${s.id})"><i class="ti ti-trash"></i></button>
-      </div>
-      <div class="timeline-stats" style="width:100%">
-        <div>📚 Source: <span style="color:var(--tx1)">${s.source||'N/A'}</span></div>
-        <div>🗓️ Days: <span style="color:var(--tx1)">${actDaysStr}</span></div>
-        <div>⏳ Total/Left: <span style="color:var(--tx1)">${s.totalDays||0} / ${left} days</span></div>
-        <div>🎯 Done/Missed: <span style="color:var(--tx1)">${s.completedDays||0} / <span style="color:var(--red)">${s.missedDays||0}</span></span></div>
-      </div>
-    </div>`;
-  }).join('');
-  updateOverview();save();
-}
-function logSkill(id){
-  const s=state.skills.find(x=>x.id===id);
-  if(s.logDate===TK){
-    if(s.totalDays) s.completedDays = Math.max(0, s.completedDays-1); else s.pct = Math.max(0, s.pct-2);
-    s.streak=Math.max(0,s.streak-1); s.logDate='';
-  }else{
-    if(s.totalDays) s.completedDays++; else s.pct = Math.min(100, s.pct+2);
-    s.streak++; s.logDate=TK;
-  }
-  if(s.totalDays) s.pct = Math.min(100, Math.round((s.completedDays / s.totalDays)*100));
-  renderSkills();reChart(['skills','overview']);
-}
-function delSkill(id){state.skills=state.skills.filter(x=>x.id!==id);renderSkills();reChart(['skills','overview']);}
-function addSkill(){
-  const n=document.getElementById('newSkillName').value.trim();if(!n)return;
-  const sub=document.getElementById('newSkillSub').value.trim()||'Topic';
-  const src=document.getElementById('newSkillSrc').value.trim()||'Self';
-  const tot=parseInt(document.getElementById('newSkillTot').value)||30;
+// GENERIC HTML BUILDER FOR LISTS
+function buildHTML(s, listKey) {
+  const logged = s.logDate === TK;
+  const actDaysStr = (s.activeDays||[0,1,2,3,4,5,6]).length===7 ? 'Daily' : s.activeDays.map(d=>DAYS[d]).join(', ');
+  const left = s.totalDays ? (s.totalDays - (s.completedDays||0)) : '∞';
   
-  const cbs = document.querySelectorAll('#skillDaysCb input[type="checkbox"]:checked');
+  // Calculate dynamic PCT if totalDays exist, else use saved pct
+  if(s.totalDays > 0) s.pct = Math.min(100, Math.round(((s.completedDays||0) / s.totalDays)*100));
+  const pct = s.pct || 0;
+
+  return `
+  <div class="row" style="align-items:flex-start;padding:12px 0;flex-direction:column;gap:6px">
+    <div style="display:flex;width:100%;align-items:center;gap:10px">
+      <button class="check-btn ${logged?'done':''}" onclick="logItem('${listKey}',${s.id})">${logged?'<i class="ti ti-check"></i>':''}</button>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:600;color:var(--tx1);text-decoration:${logged?'line-through':'none'}">${s.name}</span>
+          ${s.sub?`<span style="font-size:11px;color:var(--tx2)">${s.sub}</span>`:''}
+          ${(s.streak||0)>0?`<span class="streak-pill">🔥 ${s.streak}d</span>`:''}
+        </div>
+        <div class="prog-wrap" style="margin-top:6px"><div class="prog" style="width:${pct}%;background:${gc(pct)}"></div></div>
+      </div>
+      <span class="pct-label" style="color:${gc(pct)}">${pct}%</span>
+      <button class="del-btn" onclick="delItem('${listKey}',${s.id})"><i class="ti ti-trash"></i></button>
+    </div>
+    <div class="timeline-stats">
+      <div>🗓️ <span style="color:var(--tx1)">${actDaysStr}</span></div>
+      <div>⏳ <span style="color:var(--tx1)">Tot: ${s.totalDays||'∞'} | Lft: ${left}</span></div>
+      <div>🎯 <span style="color:var(--tx1)">Done: ${s.completedDays||0} | Msd: <span style="color:var(--red)">${s.missedDays||0}</span></span></div>
+    </div>
+  </div>`;
+}
+
+// GENERIC ACTIONS
+function logItem(k, id) {
+  const item = state.lists[k].find(x => x.id === id);
+  if(item.logDate === TK) {
+    if(item.totalDays) item.completedDays = Math.max(0, item.completedDays-1); 
+    else item.pct = Math.max(0, (item.pct||0)-2);
+    item.streak = Math.max(0, (item.streak||0)-1);
+    item.logDate = '';
+  } else {
+    if(item.totalDays) item.completedDays = (item.completedDays||0)+1; 
+    else item.pct = Math.min(100, (item.pct||0)+2);
+    item.streak = (item.streak||0)+1;
+    item.logDate = TK;
+  }
+  save(); renderAll(); reChart([k,'overview']);
+}
+
+function delItem(k, id) {
+  state.lists[k] = state.lists[k].filter(x => x.id !== id);
+  save(); renderAll(); reChart([k,'overview']);
+}
+
+function addItem(k, nId, sId, tId) {
+  const n = document.getElementById(nId)?.value.trim(); if(!n) return;
+  const sub = sId ? document.getElementById(sId)?.value.trim() : '';
+  const tot = tId ? parseInt(document.getElementById(tId)?.value)||0 : 0;
+  
+  const cbs = document.querySelectorAll(`#cb_${k} input[type="checkbox"]:checked`);
   const activeDays = Array.from(cbs).map(cb => parseInt(cb.value));
 
-  state.skills.push({id:nid++,name:n,sub:sub,source:src,activeDays:activeDays,totalDays:tot,completedDays:0,missedDays:0,pct:0,streak:0,logDate:''});
+  state.lists[k].push({
+    id: nid++, name: n, sub: sub, activeDays: activeDays, totalDays: tot, 
+    completedDays: 0, missedDays: 0, pct: 0, streak: 0, logDate: ''
+  });
+
+  document.getElementById(nId).value = '';
+  if(sId) document.getElementById(sId).value = '';
+  if(tId) document.getElementById(tId).value = '';
   
-  document.getElementById('newSkillName').value='';document.getElementById('newSkillSub').value='';
-  document.getElementById('newSkillSrc').value='';document.getElementById('newSkillTot').value='';
-  renderSkills();save();reChart(['skills','overview']);
+  save(); renderAll(); reChart([k,'overview']);
 }
 
-/* ACADEMICS */
-function renderAcademics(){
-  ['cuj','iitm'].forEach(src=>{
-    document.getElementById(src+'List').innerHTML=state[src].map(s=>{
-      const pct=s.got!=null?Math.round((s.got/s.total)*100):0;
-      return `<div class="row">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:500;color:var(--tx1)">${s.name}</div>
-          <div class="prog-wrap"><div class="prog" style="width:${pct}%;background:${gc(pct)}"></div></div>
-        </div>
-        <div class="score-inputs" style="display:flex;gap:5px;align-items:center;flex-shrink:0">
-          <input class="score-in" type="number" min="0" max="${s.total}" placeholder="Score" value="${s.got??''}" oninput="updScore('${src}',${s.id},this.value,${s.total})" />
-          <span style="font-size:11px;color:var(--tx2)">/${s.total}</span>
-          <span style="font-size:12px;font-weight:600;min-width:34px;text-align:right;color:${gc(pct)}">${s.got!=null?pct+'%':'—'}</span>
-        </div>
-        <button class="del-btn" onclick="delAcad('${src}', ${s.id})"><i class="ti ti-trash"></i></button>
-      </div>`;
-    }).join('');
+// SPECIFIC FITNESS GLOBAL
+function toggleGym() {
+  state.gymDoneToday = !state.gymDoneToday;
+  if(state.gymDoneToday) state.gymStreak++; else state.gymStreak = Math.max(0, state.gymStreak-1);
+  renderFitnessBtn(); save();
+}
+function renderFitnessBtn() {
+  const b = document.getElementById('gymGlobalBtn');
+  if(state.gymDoneToday){ b.classList.add('done'); b.innerHTML = '<i class="ti ti-check"></i>'; }
+  else { b.classList.remove('done'); b.innerHTML = ''; }
+}
+
+// RENDERERS
+function renderList(key) {
+  const el = document.getElementById(key+'List');
+  if(el) el.innerHTML = state.lists[key].map(s => buildHTML(s, key)).join('');
+}
+
+function updateOverviewStats() {
+  const keys = ['habits', 'skills', 'academics', 'fitness'];
+  keys.forEach(k => {
+    const list = state.lists[k];
+    const totalPct = list.length ? Math.round(list.reduce((a,c)=>a+(c.pct||0), 0) / list.length) : 0;
+    const el = document.getElementById(`ov-${k.charAt(0)}`);
+    if(el) el.textContent = totalPct + '%';
   });
-  document.getElementById('certList').innerHTML=state.certs.map(c=>`
-    <div class="row">
-      <button class="check-btn ${c.done?'done':''}" onclick="toggleCert(${c.id})">${c.done?'<i class="ti ti-check"></i>':''}</button>
-      <span class="name ${c.done?'crossed':''}">${c.name}</span>
-      <button class="del-btn" onclick="delCert(${c.id})"><i class="ti ti-trash"></i></button>
-    </div>`).join('');
-  updateOverview();save();
 }
-function addAcad(src){
-  let v = document.getElementById('new'+src+'Name').value.trim();
-  let tot = parseInt(document.getElementById('new'+src+'Tot').value) || 100;
-  if(!v) return;
-  state[src].push({id:nid++, name:v, got:null, total:tot});
-  document.getElementById('new'+src+'Name').value='';
-  renderAcademics(); save(); reChart(['academics']);
-}
-function delAcad(src, id){state[src] = state[src].filter(x=>x.id!==id); renderAcademics(); save(); reChart(['academics']);}
-function updScore(src,id,val,tot){const item=state[src].find(x=>x.id===id);item.got=val===''?null:Math.min(tot,Math.max(0,parseFloat(val)));renderAcademics();reChart(['academics','overview']);}
-function toggleCert(id){const c=state.certs.find(x=>x.id===id);c.done=!c.done;renderAcademics();}
-function delCert(id){state.certs=state.certs.filter(x=>x.id!==id);renderAcademics();}
-function addCert(){const v=document.getElementById('newCert').value.trim();if(!v)return;state.certs.push({id:nid++,name:v,done:false});document.getElementById('newCert').value='';renderAcademics();save();}
 
-/* CONTENT, FITNESS, TODOS (Retained standard functions) */
-const STATUS_COLORS={'idea':'#EEEDFE','scripting':'#FAEEDA','making':'#E6F1FB','done':'#EAF3DE'};
-const STATUS_TEXT={'idea':'#3C3489','scripting':'#633806','making':'#0C447C','done':'#27500A'};
-function renderContent(){
-  ['aiContent','pContent'].forEach(key=>{
-    const listId=key==='aiContent'?'aiContentList':'personalContentList';
-    document.getElementById(listId).innerHTML=state[key].map(c=>`
-      <div class="row">
-        <span class="name">${c.text}</span>
-        <span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;background:${STATUS_COLORS[c.status]};color:${STATUS_TEXT[c.status]}">${c.status}</span>
-        <select style="font-size:11px;padding:3px 5px;border:0.5px solid var(--br);border-radius:5px;background:var(--bg1);color:var(--tx1)" onchange="updContentStatus('${key}',${c.id},this.value)">
-          ${['idea','scripting','making','done'].map(s=>`<option value="${s}" ${s===c.status?'selected':''}>${s}</option>`).join('')}
-        </select>
-        <button class="del-btn" onclick="delContent('${key}',${c.id})"><i class="ti ti-trash"></i></button>
-      </div>`).join('');
-  });
-  document.getElementById('c-ai-count').textContent=state.aiContent.length;
-  document.getElementById('c-p-count').textContent=state.pContent.length;
-  save();reChart(['content','overview']);
+function renderAll() {
+  Object.keys(state.lists).forEach(k => renderList(k));
+  renderFitnessBtn();
+  updateOverviewStats();
 }
-function updContentStatus(k,id,v){const c=state[k].find(x=>x.id===id);c.status=v;renderContent();}
-function delContent(k,id){state[k]=state[k].filter(x=>x.id!==id);renderContent();}
-function addAiIdea(){const v=document.getElementById('newAiIdea').value.trim();if(!v)return;state.aiContent.push({id:nid++,text:v,status:document.getElementById('aiStatus').value});document.getElementById('newAiIdea').value='';renderContent();}
-function addPIIdea(){const v=document.getElementById('newPIdea').value.trim();if(!v)return;state.pContent.push({id:nid++,text:v,status:document.getElementById('pStatus').value});document.getElementById('newPIdea').value='';renderContent();}
 
-function renderFitness(){
-  const f=state.fitness;const gymDone=f.gymDoneToday;
-  document.getElementById('fit-streak').textContent=f.gymStreak+(f.gymStreak>0?'🔥':'');
-  document.getElementById('fit-week').textContent=f.gymWeek.slice(-7).filter(x=>x>0).length+'/7';
-  document.getElementById('fit-total').textContent=f.gymTotal;
-  document.getElementById('fitnessList').innerHTML=`
-    <div class="row"><button class="check-btn ${gymDone?'done':''}" onclick="toggleGym()">${gymDone?'<i class="ti ti-check"></i>':''}</button><span class="name ${gymDone?'crossed':''}">Gym / Workout done</span>${f.gymStreak>0?`<span class="streak-pill">🔥 ${f.gymStreak}d</span>`:''}</div>`+
-    f.exercises.map(e=>`<div class="row"><button class="check-btn ${e.done?'done':''}" onclick="toggleEx(${e.id})">${e.done?'<i class="ti ti-check"></i>':''}</button><span class="name ${e.done?'crossed':''}">${e.name}</span><button class="del-btn" onclick="delEx(${e.id})"><i class="ti ti-trash"></i></button></div>`).join('');
-  updateOverview();save();
-}
-function toggleGym(){const f=state.fitness;f.gymDoneToday=!f.gymDoneToday;if(f.gymDoneToday){f.gymStreak++;f.gymTotal++;}else{f.gymStreak=Math.max(0,f.gymStreak-1);f.gymTotal=Math.max(0,f.gymTotal-1);}renderFitness();reChart(['fitness','overview']);}
-function toggleEx(id){const e=state.fitness.exercises.find(x=>x.id===id);e.done=!e.done;renderFitness();}
-function delEx(id){state.fitness.exercises=state.fitness.exercises.filter(x=>x.id!==id);renderFitness();}
-function addExercise(){const v=document.getElementById('newExercise').value.trim();if(!v)return;state.fitness.exercises.push({id:nid++,name:v,done:false});document.getElementById('newExercise').value='';renderFitness();save();}
-
-function renderTodos(){
-  document.getElementById('todoList').innerHTML=state.todos.map(t=>`
-    <div class="row">
-      <button class="check-btn ${t.done?'done':''}" onclick="toggleTodo(${t.id})">${t.done?'<i class="ti ti-check"></i>':''}</button>
-      <div style="flex:1"><div class="name ${t.done?'done-t':''}" style="${t.done?'text-decoration:line-through;color:var(--tx2)':''}">${t.text}</div></div>
-      <button class="del-btn" onclick="delTodo(${t.id})"><i class="ti ti-trash"></i></button>
-    </div>`).join('');
-  save();
-}
-function toggleTodo(id){const t=state.todos.find(x=>x.id===id);t.done=!t.done;renderTodos();}
-function delTodo(id){state.todos=state.todos.filter(x=>x.id!==id);renderTodos();}
-function addTodo(){const v=document.getElementById('newTodo').value.trim();if(!v)return;state.todos.push({id:nid++,text:v,cat:document.getElementById('todoCat').value,done:false});document.getElementById('newTodo').value='';renderTodos();}
-
-/* DAILY TIME SPLIT (Modal & CRUD) */
-let editingTS = null;
-function renderTS() {
-  document.getElementById('tsSplitList').innerHTML = state.timeSplit.map(t => `
-    <div class="roadmap-item" style="align-items:center;">
-      <div class="roadmap-content">
-        <div class="roadmap-title">${t.time}</div>
-        <div class="roadmap-desc" style="margin-top:0">${t.activity}</div>
-      </div>
-      <button class="log-btn" onclick="openTSModal(${t.id})">Edit</button>
-      <button class="del-btn" onclick="delTS(${t.id})"><i class="ti ti-trash"></i></button>
-    </div>
-  `).join('');
-}
-function openTSModal(id=null) {
-  editingTS = id;
-  if(id) {
-    let t = state.timeSplit.find(x=>x.id===id);
-    document.getElementById('tsInputTime').value = t.time;
-    document.getElementById('tsInputAct').value = t.activity;
-    document.getElementById('tsModalHeading').textContent = 'Edit Time Slot';
-  } else {
-    document.getElementById('tsInputTime').value = '';
-    document.getElementById('tsInputAct').value = '';
-    document.getElementById('tsModalHeading').textContent = 'Add Time Slot';
-  }
-  document.getElementById('tsModalBg').style.display='flex';
-}
-function closeTSModal() { document.getElementById('tsModalBg').style.display='none'; }
-function saveTS() {
-  let tm=document.getElementById('tsInputTime').value.trim();
-  let ac=document.getElementById('tsInputAct').value.trim();
-  if(!tm || !ac) return;
-  if(editingTS) {
-    let t = state.timeSplit.find(x=>x.id===editingTS);
-    t.time=tm; t.activity=ac;
-  } else {
-    state.timeSplit.push({id:nid++, time:tm, activity:ac});
-  }
-  closeTSModal(); renderTS(); save();
-}
-function delTS(id) { state.timeSplit=state.timeSplit.filter(x=>x.id!==id); renderTS(); save(); }
-
-/* OVERVIEW & CHARTS */
-function updateOverview(){
-  const hd=state.habits.filter(h=>h.done).length,ht=state.habits.length||1;
-  document.getElementById('ov-h').textContent=Math.round((hd/ht)*100)+'%';
-  const sa=state.skills.length?Math.round(state.skills.reduce((a,s)=>a+s.pct,0)/state.skills.length):0;
-  document.getElementById('ov-s').textContent=sa+'%';
-  const all=[...state.cuj,...state.iitm].filter(s=>s.got!=null);
-  document.getElementById('ov-a').textContent=all.length?Math.round(all.reduce((a,s)=>a+(s.got/s.total)*100,0)/all.length)+'%':'—';
-  const exDone=state.fitness.exercises.filter(e=>e.done).length,exTotal=state.fitness.exercises.length||1;
-  document.getElementById('ov-f').textContent=Math.round((exDone/exTotal)*100)+'%';
-}
+// CHARTS ENGINE
 function dc(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
-function reChart(tabs){tabs.forEach(t=>{if(document.getElementById(t).classList.contains('active'))renderCharts(t);});}
+function reChart(tabs){tabs.forEach(t=>{if(document.getElementById(t)?.classList.contains('active')) renderCharts(t);});}
 
-function renderCharts(tab){
-  const days=[];for(let i=6;i>=0;i--){const d=new Date(NOW);d.setDate(d.getDate()-i);days.push(DAYS[d.getDay()]);}
-  const hd=state.habits.filter(h=>h.done).length,ht=state.habits.length||1;
-  const tp=Math.round((hd/ht)*100);
-  const wd=[...state.weekHistory.slice(-6),tp];while(wd.length<7)wd.unshift(0);
+function renderCharts(tab) {
+  const dLayout = { maintainAspectRatio:false, plugins:{legend:{display:false}} };
+  const dScales = { y:{min:0,max:100,grid:{color:'rgba(128,128,128,.1)'}}, x:{grid:{display:false}} };
 
-  if(tab==='overview'){
-    dc('weekChart'); const wc=document.getElementById('weekChart');
-    if(wc)charts.weekChart=new Chart(wc,{type:'bar',data:{labels:days,datasets:[{data:wd,backgroundColor:wd.map(v=>v>=80?'#1D9E75':v>=50?'#BA7517':'#9FE1CB'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:10}}}}}});
-    dc('skillChart'); const sch=document.getElementById('skillChart');
-    if(sch&&state.skills.length)charts.skillChart=new Chart(sch,{type:'doughnut',data:{labels:state.skills.map(s=>s.name),datasets:[{data:state.skills.map(s=>s.pct),backgroundColor:['#1D9E75','#378ADD','#BA7517','#D85A30','#534AB7','#D4537E'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+  if(tab === 'overview') {
+    dc('weekChart'); const wc = document.getElementById('weekChart');
+    if(wc) charts.weekChart = new Chart(wc,{type:'bar', data:{labels:['D-6','D-5','D-4','D-3','D-2','Yest','Today'], datasets:[{data:state.weekHistory, backgroundColor:'#378ADD', borderRadius:4}]}, options:{...dLayout, scales:dScales}});
+    
+    dc('skillChart'); const sc = document.getElementById('skillChart');
+    if(sc && state.lists.skills.length) charts.skillChart = new Chart(sc,{type:'doughnut', data:{labels:state.lists.skills.map(s=>s.name), datasets:[{data:state.lists.skills.map(s=>s.pct||1), backgroundColor:['#1D9E75','#378ADD','#BA7517','#D85A30','#534AB7','#D4537E'], borderWidth:0}]}, options:{...dLayout, plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
+    
+    dc('contentChart'); const cc = document.getElementById('contentChart');
+    if(cc && state.lists.content.length) charts.contentChart = new Chart(cc,{type:'pie', data:{labels:state.lists.content.map(s=>s.name), datasets:[{data:state.lists.content.map(s=>s.pct||1), backgroundColor:['#534AB7','#BA7517','#378ADD','#1D9E75'], borderWidth:0}]}, options:{...dLayout, plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
   }
-  if(tab==='academics'){
-    dc('acadChart'); const ac=document.getElementById('acadChart');
-    if(ac){
-      const all=[...state.cuj,...state.iitm];
-      const bh=Math.max(200,(all.length*42)+60);ac.parentElement.style.height=bh+'px';
-      charts.acadChart=new Chart(ac,{type:'bar',data:{labels:all.map(s=>s.name.length>22?s.name.slice(0,20)+'…':s.name),datasets:[{data:all.map(s=>s.got!=null?Math.round((s.got/s.total)*100):0),backgroundColor:all.map(s=>s.got!=null?gc(Math.round((s.got/s.total)*100)):'#D3D1C7'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});
+
+  // Habits Graph: Shows Current Streaks vs Pct
+  if(tab === 'habits') {
+    dc('habitGraph'); const hg = document.getElementById('habitGraph');
+    if(hg) charts.habitGraph = new Chart(hg,{type:'bar', data:{labels:state.lists.habits.map(s=>s.name.substring(0,10)), datasets:[{label:'Streak', data:state.lists.habits.map(s=>s.streak), backgroundColor:'#1D9E75', borderRadius:4}, {label:'Progress %', data:state.lists.habits.map(s=>s.pct), backgroundColor:'#BA7517', borderRadius:4}]}, options:{responsive:true, maintainAspectRatio:false, scales:{y:{grid:{color:'rgba(128,128,128,.1)'}}, x:{grid:{display:false}}}}});
+  }
+
+  // Universal Progress Bars for other sections
+  ['skills', 'academics', 'content', 'fitness', 'todos'].forEach(t => {
+    if(tab === t) {
+      const gId = t.substring(0,4) + 'ProgGraph';
+      dc(gId); const el = document.getElementById(gId);
+      if(el) charts[gId] = new Chart(el,{type:'bar', data:{labels:state.lists[t].map(s=>s.name.substring(0,12)), datasets:[{data:state.lists[t].map(s=>s.pct), backgroundColor:state.lists[t].map(s=>gc(s.pct)), borderRadius:4}]}, options:{...dLayout, indexAxis:'y', scales:{x:{min:0,max:100,grid:{color:'rgba(128,128,128,.1)'}}, y:{grid:{display:false}}}}});
     }
-  }
+  });
 }
 
-function renderAll(){renderHabits();renderSkills();renderAcademics();renderContent();renderFitness();renderTodos();renderTS();updateOverview();}
 renderAll();
-setTimeout(()=>renderCharts('overview'),200);
+setTimeout(() => renderCharts('overview'), 200);
 </script>
 </body>
 </html>
